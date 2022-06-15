@@ -11,7 +11,7 @@ class List extends React.Component {
 
     cargarDatos(){
 
-        fetch("https://jsonplaceholder.typicode.com/users")  //consumo la api
+        fetch("http://localhost/empleados/")  //consumo la api
         .then(respuesta =>respuesta.json()) //la respuesta la recibo en formato json
         .then((datosRespuesta)=>{ 
             console.log(datosRespuesta); // y almaceno la respuesta en la variable datosRespuesta
@@ -30,37 +30,53 @@ class List extends React.Component {
         if(!datosCargados){
             return(<div>Cargando...</div>);
         }else{
-            return ( <table className="table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Correo</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    empleados.map(
-                        (empleado)=>(
-                            <tr key={empleado.id}>
-                            <td>{empleado.id}</td>
-                            <td>{empleado.name}</td>
-                            <td>{empleado.email}</td>
-                            <td>
-                                <div className="btn-group" role="group" aria-label="">
-                                    <Link className="btn btn-warning" to={"/editar"}>Editar</Link>
-                                    <button type="button" className="btn btn-danger">Borrar</button>
-                                </div>
-                            </td>
-                            </tr>
-                        )
-                    )
-                }
-                
+            return ( 
 
-            </tbody>
-        </table>);
+                <div className="card">
+                    <div className="card-header">
+                    <Link className="btn btn-success" to={"/create"}>Agregar nuevo empleado</Link>
+                    </div>
+                    <div className="card-body">
+                        <h4>Lista de empleados</h4>  
+                        <table className="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        empleados.map(
+                            (empleado)=>(
+                                <tr key={empleado.id}>
+                                <td>{empleado.id}</td>
+                                <td>{empleado.nombre}</td>
+                                <td>{empleado.correo}</td>
+                                <td>
+                                    <div className="btn-group" role="group" aria-label="">
+                                        <Link className="btn btn-warning" to={"/editar"}>Editar</Link>
+                                        <button type="button" className="btn btn-danger">Borrar</button>
+                                    </div>
+                                </td>
+                                </tr>
+                            )
+                        )
+                    }
+                    
+
+                </tbody>
+            </table>
+
+                    </div>
+                    <div className="card-footer text-muted">
+                       
+                    </div>
+                </div>
+                
+            );
         }
     }
 }
