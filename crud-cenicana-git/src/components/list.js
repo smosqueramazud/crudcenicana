@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Routes, Route, BrowserRouter as Router } from "react-router-dom";
 
+
 class List extends React.Component {
     constructor(props) {
         super(props);
@@ -9,10 +10,23 @@ class List extends React.Component {
         } 
     }
 
+    eliminarRegistro = (id) => {
+        console.log(id);
+
+        fetch("http://localhost/empleados/?borrar="+id)  //consumo la api y le paso el parametro id
+        .then(respuesta =>respuesta.json()) //la respuesta la recibo en formato json
+        .then((datosRespuesta)=>{ 
+            console.log(datosRespuesta); // y almaceno la respuesta en la variable datosRespuesta
+            this.cargarDatos(); //cargamos nuevamente la tabla
+        }) 
+        .catch(console.log) // si falla imprima los errores 
+    }
+
+
     cargarDatos(){
 
         fetch("http://localhost/empleados/")  //consumo la api
-        .then(respuesta =>respuesta.json()) //la respuesta la recibo en formato json
+        .then(respuesta =>respuesta.json()[0]) //la respuesta la recibo en formato json
         .then((datosRespuesta)=>{ 
             console.log(datosRespuesta); // y almaceno la respuesta en la variable datosRespuesta
             this.setState({datosCargados:true, empleados:datosRespuesta});
@@ -34,10 +48,10 @@ class List extends React.Component {
 
                 <div className="card">
                     <div className="card-header">
-                    <Link className="btn btn-success" to={"/create"}>Agregar nuevo empleado</Link>
+                    <Link className="btn btn-success" to={"/create"}>Agregar nuevo autor</Link>
                     </div>
                     <div className="card-body">
-                        <h4>Lista de empleados</h4>  
+                        <h4>Lista de autores</h4>  
                         <table className="table">
                 <thead>
                     <tr>
@@ -57,8 +71,11 @@ class List extends React.Component {
                                 <td>{empleado.correo}</td>
                                 <td>
                                     <div className="btn-group" role="group" aria-label="">
-                                        <Link className="btn btn-warning" to={"/editar"}>Editar</Link>
-                                        <button type="button" className="btn btn-danger">Borrar</button>
+                                        <Link className="btn btn-warning" 
+                                        to={"/editar/"+ empleado.id}>Editar</Link> {/* envio el parametro id en la url */}
+                
+                                        <button type="button" className="btn btn-danger" 
+                                        onClick={()=>this.eliminarRegistro(empleado.id)}>Borrar</button>
                                     </div>
                                 </td>
                                 </tr>

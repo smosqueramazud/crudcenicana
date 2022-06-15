@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import {  } from "react-router-dom";
 
 class Create extends React.Component {
     constructor(props) {
@@ -8,8 +9,9 @@ class Create extends React.Component {
     }
     
     state = { 
-        nombre: "",
-        correo: ""
+        nombreLibro: "",
+        nombreAutor: "",
+        fechaPubli: ""
      }
 
      cambioValor = (e) => { //se ejecuta cuando el valor del input cambia
@@ -22,35 +24,56 @@ class Create extends React.Component {
         e.preventDefault();
         console.log("Formulario enviado"); 
 
-        const{nombre, correo}= this.state
+        const{nombreLibro, nombreAutor, fechaPubli}= this.state
 
-        console.log(nombre);
-        console.log(correo);
+        console.log(nombreLibro);
+        console.log(nombreAutor);
+        console.log(fechaPubli);
+
+        var datosEnviar = {nombre_libro: nombreLibro, nombre_autor: nombreAutor, fecha_publicacion: fechaPubli}
+        console.log(datosEnviar);
+
+        fetch("http://localhost/empleados/?insertar=1",{
+            method:"POST",
+            body:JSON.stringify(datosEnviar) //consumo el servicio de insertar a traves del metodo post y pasando datosEnviar como valores (request)
+        }) 
+        .then(respuesta =>respuesta.json()) 
+        .then((datosRespuesta)=>{ 
+            console.log(datosRespuesta);
+            window.location.replace("/");
+        }) 
+        .catch(console.log) // si falla imprima los errores
     }
 
 
     render() { 
-        const{nombre, correo}= this.state //asigno los valores en el render
+        const{nombreLibro, nombreAutor, fechaPubli}= this.state //asigno los valores en el render
 
 
         return ( 
             <div className="card">
                 <div className="card-header">
-                    Empleados
+                    Libros
                 </div>
                 <div className="card-body">
                     <form onSubmit={this.enviarDatos}>
 
                         <div className="form-group">
-                          <label htmlFor="">Nombre:</label>
-                          <input type="text" name="nombre" onChange={this.cambioValor} value={nombre} id="nombre" className="form-control" placeholder="" aria-describedby="helpId" />
-                          <small id="helpId" className="text-muted">Escribe el nombre del empleado</small>
+                          <label htmlFor="">Nombre del libro:</label>
+                          <input type="text" name="nombreLibro" onChange={this.cambioValor} value={nombreLibro} id="nombreLibro" className="form-control" placeholder="" aria-describedby="helpId" />
+                          <small id="helpId" className="text-muted">Escribe el nombre del Libro</small>
                         </div>
                         <br></br>
                         <div className="form-group">
-                          <label htmlFor="">Correo:</label>
-                          <input type="text" name="correo" onChange={this.cambioValor} value={correo} id="correo" className="form-control" placeholder="" aria-describedby="helpId" />
-                          <small id="helpId" className="text-muted">Escribe el correo del empleado</small>
+                          <label htmlFor="">Nombre del autor:</label>
+                          <input type="text" name="nombreAutor" onChange={this.cambioValor} value={nombreAutor} id="nombreAutor" className="form-control" placeholder="" aria-describedby="helpId" />
+                          <small id="helpId" className="text-muted">Escribe el nombre del autor</small>
+                        </div>
+                        <br></br>
+                        <div className="form-group">
+                          <label htmlFor="">Fecha de Publicación:</label>
+                          <input type="text" name="fechaPubli" onChange={this.cambioValor} value={fechaPubli} id="fechaPubli" className="form-control" placeholder="" aria-describedby="helpId" />
+                          <small id="helpId" className="text-muted">Escribe la fecha de Publicación</small>
                         </div>
                         <br></br>
                         <br></br>
